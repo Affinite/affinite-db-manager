@@ -1,0 +1,474 @@
+---------------------------------------------------------------------------
+KOMPLETNÍ ZADÁNÍ PRO VÝVOJ:
+---------------------------------------------------------------------------
+
+## Projektové informace
+
+**Plugin Name:** Affinite DB Manager
+**Plugin Description:** Complex database adminer
+**Namespace:** Affinite\DBManager
+**Version:** 1.0.0
+**Plugin Slug:** affinite-db-manager
+**Text Domain:** affinite-db-manager
+**Prefix (hooks, functions, options):** [prefix_]
+**CSS Prefix:** [prefix-]
+**DB Table Prefix:** [prefix-]
+**Composer Package Name:** [your-company/plugin-slug]
+
+## Specifické zadání projektu
+
+# Affinite DB Manager – Zadání pluginu
+
+## Cíl
+
+Vytvořit WordPress plugin pro správu databázových tabulek. Plugin slouží jako:
+1. Funkční nástroj pro správu DB
+2. Vývojové prostředí pro budoucí extrakci do npm/Composer balíčků
+
+---
+
+## Umístění v admin menu
+
+**Tools → DB Manager**
+
+Submenu:
+- DB Manager (hlavní obrazovka – správa tabulek)
+- Settings (nastavení přístupu)
+
+---
+
+## Obrazovky
+
+### 1. Settings (Nastavení)
+
+**URL:** `/wp-admin/admin.php?page=affinite-db-manager-settings`
+
+**Obsah:**
+
+```
+┌─────────────────────────────────────────────────────┐
+│ DB Manager – Nastavení                              │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│ Stav                                                │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ [●] Aktivní   [ ] Neaktivní                    │ │
+│ └─────────────────────────────────────────────────┘ │
+│                                                     │
+│ Povolení uživatelé                                  │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ admin@example.com                         [×]  │ │
+│ │ dev@example.com                           [×]  │ │
+│ │                                                │ │
+│ │ [+ Přidat email]                               │ │
+│ └─────────────────────────────────────────────────┘ │
+│                                                     │
+│ Zamčené tabulky                                     │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ [Hledat tabulku...]                            │ │
+│ │                                                │ │
+│ │ 🔒 wp_posts                    [Odemknout]    │ │
+│ │ 🔒 wp_postmeta                 [Odemknout]    │ │
+│ │ 🔒 wp_options                  [Odemknout]    │ │
+│ │ ...                                            │ │
+│ │ 🔓 wp_custom_table             [Zamknout]     │ │
+│ └─────────────────────────────────────────────────┘ │
+│                                                     │
+│ [Uložit nastavení]                                  │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+**Funkce:**
+- Toggle aktivace DB Manageru
+- Správa whitelistu emailů
+- Správa zámků tabulek
+- Filtrování/hledání v seznamu tabulek
+
+---
+
+### 2. DB Manager (Správa tabulek)
+
+**URL:** `/wp-admin/admin.php?page=affinite-db-manager`
+
+**Stav: Neaktivní nebo bez přístupu**
+```
+┌─────────────────────────────────────────────────────┐
+│ DB Manager                                          │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│ ⚠️ DB Manager není aktivní nebo nemáte oprávnění.  │
+│                                                     │
+│ Kontaktujte administrátora.                         │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+**Stav: Aktivní s přístupem**
+```
+┌─────────────────────────────────────────────────────┐
+│ DB Manager                                          │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│ [+ Nová tabulka]                    [Hledat...]    │
+│                                                     │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ Tabulka              Sloupců  Záznamů   Akce   │ │
+│ ├─────────────────────────────────────────────────┤ │
+│ │ 🔒 wp_posts            23      156      [👁]   │ │
+│ │ 🔒 wp_postmeta          4    1,892      [👁]   │ │
+│ │ 🔓 wp_my_cars           5       12      [✏️][🗑]│ │
+│ │ 🔓 wp_my_models         4       48      [✏️][🗑]│ │
+│ └─────────────────────────────────────────────────┘ │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+**Akce:**
+- 👁 Zobrazit strukturu (read-only pro zamčené)
+- ✏️ Upravit strukturu (jen odemčené)
+- 🗑 Smazat tabulku (jen odemčené)
+
+---
+
+### 2a. Detail tabulky / Editor
+
+**URL:** `/wp-admin/admin.php?page=affinite-db-manager&table=wp_my_cars`
+
+```
+┌─────────────────────────────────────────────────────┐
+│ DB Manager → wp_my_cars                    [← Zpět]│
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│ Tabs: [Sloupce] [Indexy] [Relace] [Data]           │
+│                                                     │
+│ ═══════════════════════════════════════════════════ │
+│                                                     │
+│ Sloupce                              [+ Přidat]    │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ Název      Typ          Null  Default    Akce   │ │
+│ ├─────────────────────────────────────────────────┤ │
+│ │ id         BIGINT(20)   NO    AUTO_INC   [✏️🗑]│ │
+│ │ post_id    BIGINT(20)   NO    -          [✏️🗑]│ │
+│ │ brand      VARCHAR(100) NO    -          [✏️🗑]│ │
+│ │ model      VARCHAR(100) YES   NULL       [✏️🗑]│ │
+│ │ year       INT(4)       YES   NULL       [✏️🗑]│ │
+│ └─────────────────────────────────────────────────┘ │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+**Tab Indexy:**
+```
+│ Indexy                               [+ Přidat]    │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ Název          Typ       Sloupce         Akce   │ │
+│ ├─────────────────────────────────────────────────┤ │
+│ │ PRIMARY        PRIMARY   id              [🗑]   │ │
+│ │ idx_post_id    INDEX     post_id         [🗑]   │ │
+│ │ idx_brand      INDEX     brand           [🗑]   │ │
+│ └─────────────────────────────────────────────────┘ │
+```
+
+**Tab Relace:**
+```
+│ Relace (Foreign Keys)                [+ Přidat]    │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ Sloupec    Odkazuje na         ON DELETE  Akce  │ │
+│ ├─────────────────────────────────────────────────┤ │
+│ │ post_id    wp_posts.ID         CASCADE    [🗑]  │ │
+│ └─────────────────────────────────────────────────┘ │
+```
+
+**Tab Data (náhled):**
+```
+│ Data (prvních 100 záznamů)           [Exportovat]  │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ id    post_id    brand    model    year        │ │
+│ ├─────────────────────────────────────────────────┤ │
+│ │ 1     5          BMW      M3       2020        │ │
+│ │ 2     5          Audi     A4       2019        │ │
+│ │ ...                                             │ │
+│ └─────────────────────────────────────────────────┘ │
+```
+
+---
+
+### 2b. Modální okna
+
+**Nová tabulka:**
+```
+┌─────────────────────────────────────────┐
+│ Nová tabulka                            │
+├─────────────────────────────────────────┤
+│                                         │
+│ Název tabulky:                          │
+│ wp_ [____________________]              │
+│                                         │
+│ Sloupce:                                │
+│ ┌─────────────────────────────────────┐ │
+│ │ [id] [BIGINT] [AUTO_INCREMENT] [PK] │ │
+│ │ [+ Přidat sloupec]                  │ │
+│ └─────────────────────────────────────┘ │
+│                                         │
+│ [Zrušit]              [Vytvořit]        │
+└─────────────────────────────────────────┘
+```
+
+**Editor sloupce:**
+```
+┌─────────────────────────────────────────┐
+│ Upravit sloupec                         │
+├─────────────────────────────────────────┤
+│                                         │
+│ Název:        [brand____________]       │
+│ Typ:          [VARCHAR ▼]               │
+│ Délka:        [100_____________]        │
+│ Nullable:     [ ] Povolit NULL          │
+│ Default:      [________________]        │
+│ Auto Incr.:   [ ] Auto Increment        │
+│                                         │
+│ [Zrušit]              [Uložit]          │
+└─────────────────────────────────────────┘
+```
+
+**Potvrzení odemknutí core tabulky:**
+```
+┌─────────────────────────────────────────┐
+│ ⚠️  Pozor                               │
+├─────────────────────────────────────────┤
+│                                         │
+│ Tabulka wp_posts je WordPress core      │
+│ tabulka. Úpravy mohou poškodit web.     │
+│                                         │
+│ Opravdu chcete odemknout?               │
+│                                         │
+│ Pro potvrzení napište "wp_posts":       │
+│ [________________________]              │
+│                                         │
+│ [Zrušit]              [Odemknout]       │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## Struktura pluginu
+
+Připravená pro extrakci do balíčků:
+
+```
+affinite-db-manager/
+│
+├── affinite-db-manager.php          ← Hlavní soubor pluginu
+├── composer.json
+├── package.json
+│
+├── src/                             ← PHP (budoucí Composer balíček)
+│   ├── Plugin.php                   ← Bootstrap, hooks, menu
+│   ├── Admin/
+│   │   ├── SettingsPage.php         ← Registrace admin stránky
+│   │   └── ManagerPage.php
+│   ├── Rest/
+│   │   ├── TablesController.php     ← REST API pro tabulky
+│   │   ├── ColumnsController.php
+│   │   ├── IndexesController.php
+│   │   └── SettingsController.php
+│   ├── Services/
+│   │   ├── TableService.php         ← Business logika
+│   │   ├── ColumnService.php
+│   │   ├── IndexService.php
+│   │   ├── RelationService.php
+│   │   └── AccessService.php        ← Kontrola oprávnění
+│   └── Database/
+│       └── Schema.php               ← DESCRIBE, DDL operace
+│
+├── assets/
+│   └── js/
+│       └── src/                     ← React (budoucí npm balíček)
+│           ├── index.js             ← Entry point
+│           ├── App.jsx
+│           ├── components/
+│           │   ├── settings/
+│           │   │   ├── SettingsPage.jsx
+│           │   │   ├── StatusToggle.jsx
+│           │   │   ├── EmailWhitelist.jsx
+│           │   │   └── TableLocks.jsx
+│           │   ├── manager/
+│           │   │   ├── ManagerPage.jsx
+│           │   │   ├── TableList.jsx
+│           │   │   ├── TableDetail.jsx
+│           │   │   ├── ColumnEditor.jsx
+│           │   │   ├── IndexManager.jsx
+│           │   │   ├── RelationEditor.jsx
+│           │   │   └── DataPreview.jsx
+│           │   └── common/
+│           │       ├── Modal.jsx
+│           │       ├── ConfirmDialog.jsx
+│           │       ├── SearchInput.jsx
+│           │       └── Notification.jsx
+│           ├── hooks/
+│           │   ├── useApi.js
+│           │   ├── useTables.js
+│           │   ├── useSettings.js
+│           │   └── useAccess.js
+│           ├── api/
+│           │   ├── tables.js
+│           │   ├── columns.js
+│           │   ├── indexes.js
+│           │   └── settings.js
+│           └── utils/
+│               ├── validation.js
+│               └── formatters.js
+│
+├── build/                           ← Vybuildovaný JS
+│   └── js/
+│       └── admin.js
+│
+└── languages/                       ← Překlady
+    └── affinite-db-manager-cs_CZ.po
+```
+
+---
+
+## REST API Endpointy
+
+**Namespace:** `affinite-db-manager/v1`
+
+### Settings
+
+| Metoda | Endpoint | Popis |
+|--------|----------|-------|
+| GET | `/settings` | Načte nastavení |
+| POST | `/settings` | Uloží nastavení |
+| POST | `/settings/activate` | Aktivuje DB Manager |
+| POST | `/settings/deactivate` | Deaktivuje DB Manager |
+
+### Tables
+
+| Metoda | Endpoint | Popis |
+|--------|----------|-------|
+| GET | `/tables` | Seznam tabulek |
+| POST | `/tables` | Vytvoří tabulku |
+| GET | `/tables/{name}` | Detail tabulky |
+| DELETE | `/tables/{name}` | Smaže tabulku |
+| POST | `/tables/{name}/lock` | Zamkne tabulku |
+| POST | `/tables/{name}/unlock` | Odemkne tabulku |
+
+### Columns
+
+| Metoda | Endpoint | Popis |
+|--------|----------|-------|
+| GET | `/tables/{name}/columns` | Seznam sloupců |
+| POST | `/tables/{name}/columns` | Přidá sloupec |
+| PUT | `/tables/{name}/columns/{col}` | Upraví sloupec |
+| DELETE | `/tables/{name}/columns/{col}` | Smaže sloupec |
+
+### Indexes
+
+| Metoda | Endpoint | Popis |
+|--------|----------|-------|
+| GET | `/tables/{name}/indexes` | Seznam indexů |
+| POST | `/tables/{name}/indexes` | Přidá index |
+| DELETE | `/tables/{name}/indexes/{idx}` | Smaže index |
+
+### Relations
+
+| Metoda | Endpoint | Popis |
+|--------|----------|-------|
+| GET | `/tables/{name}/relations` | Seznam FK |
+| POST | `/tables/{name}/relations` | Přidá FK |
+| DELETE | `/tables/{name}/relations/{fk}` | Smaže FK |
+
+### Data
+
+| Metoda | Endpoint | Popis |
+|--------|----------|-------|
+| GET | `/tables/{name}/data` | Náhled dat (limit 100) |
+
+---
+
+## Technologie
+
+### PHP
+- PHP 8.0+
+- WordPress 6.0+
+- PSR-4 autoloading
+- Namespace: `Affinite\DbManager`
+
+### JavaScript
+- React 18
+- React Router (pro navigaci mezi obrazovkami)
+- @wordpress/api-fetch (REST API)
+- @wordpress/components (volitelně, pro konzistenci s WP)
+- Build: Vite nebo @wordpress/scripts
+
+---
+
+## Datové struktury
+
+### Options (wp_options)
+
+**`affinite_db_manager_settings`**
+```php
+[
+    'active' => true,
+    'allowed_emails' => [
+        'admin@example.com',
+        'dev@example.com'
+    ],
+    'locked_tables' => [
+        'wp_posts',
+        'wp_postmeta',
+        'wp_options',
+        // ... všechny existující při aktivaci
+    ]
+]
+```
+
+---
+
+## Kroky implementace
+
+### Fáze 1: Základ
+1. [ ] Struktura pluginu, autoloading
+2. [ ] Registrace menu v Tools
+3. [ ] Základní React setup (entry point, router)
+4. [ ] REST API – settings endpoints
+5. [ ] Settings obrazovka (aktivace, emaily)
+
+### Fáze 2: Tabulky
+6. [ ] REST API – tables endpoints
+7. [ ] Seznam tabulek
+8. [ ] Zamykání/odemykání tabulek
+9. [ ] Potvrzovací dialog pro core tabulky
+
+### Fáze 3: Editor
+10. [ ] Detail tabulky (sloupce)
+11. [ ] Editor sloupce (modal)
+12. [ ] Přidání/smazání sloupce
+13. [ ] Vytvoření nové tabulky
+
+### Fáze 4: Rozšíření
+14. [ ] Správa indexů
+15. [ ] Správa relací (FK)
+16. [ ] Náhled dat
+17. [ ] Export struktury
+
+### Fáze 5: Extrakce
+18. [ ] Extrakce PHP do Composer balíčku
+19. [ ] Extrakce React do npm balíčku
+20. [ ] Dokumentace API
+
+---
+
+## Bezpečnost – checklist
+
+- [ ] Kontrola capability (`manage_options`)
+- [ ] Kontrola aktivace DB Manageru
+- [ ] Kontrola email whitelistu
+- [ ] Kontrola zámku tabulky před úpravou
+- [ ] Nonce validace na REST API
+- [ ] Sanitizace názvů tabulek/sloupců
+- [ ] Prepared statements pro všechny DB dotazy
+- [ ] Potvrzení při odemykání core tabulek
+

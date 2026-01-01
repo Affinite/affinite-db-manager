@@ -1,0 +1,442 @@
+# WordPress Plugin Coding Standards
+
+## JavaScript - CRITICAL RULES
+
+**NEVER use jQuery** unless absolutely necessary for WordPress core compatibility.
+
+- Use **Vanilla JavaScript (ES6+)** only
+- Use `document.addEventListener` for event handling
+- Use `querySelector`/`querySelectorAll` instead of jQuery selectors
+- Use WordPress APIs: `wp.media`, `wp.apiFetch`, `wp.i18n`, `wp.element`, etc.
+- Prefer arrow functions, const/let, template literals, destructuring
+- If JavaScript libraries are needed, prefer React
+- Avoid paid solutions if possible
+
+Example:
+```javascript
+// ✅ CORRECT - Vanilla JavaScript
+(function() {
+	'use strict';
+	
+	document.addEventListener('click', function(e) {
+		if (!e.target || !e.target.classList.contains('button')) {
+			return;
+		}
+		
+		e.preventDefault();
+		const input = document.querySelector('input[name="field"]');
+		if (input) {
+			input.value = 'value';
+		}
+	});
+})();
+
+// ❌ WRONG - Never do this
+jQuery(function($) {
+	$('.button').on('click', function() {
+		$('input[name="field"]').val('value');
+	});
+});
+```
+
+## PHP Standards
+
+- **PSR-12** coding standard (WP Coding Standards – WordPress-Core, WordPress-Extra, WordPress-Docs, včetně Yoda conditions kde to WPCS vyžaduje)
+- `declare(strict_types=1)` required in all PHP files
+- Type hints for all parameters and return values
+- Proper namespace structure: `YourCompany\PluginName`
+- DocBlocks for all classes and methods (phpdoc u veřejných metod a filtrů/akcí)
+- **Security first:**
+  - Always escape output: `esc_html()`, `esc_attr()`, `esc_url()`, `esc_js()`, `wp_kses`/`wp_kses_post`
+  - Always sanitize input: `sanitize_text_field()`, `sanitize_email()`, `sanitize_textarea_field()`, `absint()`, `floatval()`, etc.
+  - Nonce verification for all forms (check_admin_referer, wp_verify_nonce)
+  - Capability checks: `current_user_can()` (nikdy nepoužívej is_admin() jako oprávnění)
+  - Prepared statements for ALL SQL queries (`$wpdb->prepare()` se správnými placeholdery)
+- Názvosloví: povinné namespacy (žádné globální funkce bez prefixu), prefix nebo namespace pro všechny funkce, filtry, akce, class names, option keys, transients, REST routes, nonce keys
+- Soubory: jeden public účel na soubor; žádné side-effects při require/autoload (mimo bootstrap)
+- PHPCS/PHPMD: kód prochází bez chyb; varování řeš, neignoruj (výjimku zdůvodni v inline komentáři s pravidlem)
+- Static analysis: PHPStan (level max) + Psalm (strict mode) – bez chyb
+- Dead code a magické triky (variable variables, eval, dynamické require) jsou zakázané
+- Kompatibilita PHP: minimálně verze 8.1+, ale respektuj běžnou WP kompatibilitu
+- WordPress verze: 5.9+ minimum
+- Všechny texty v kódu, včetně názvů tříd, metod, funkcí a proměnných budou v angličtině
+
+## CSS Standards
+
+- **BEM methodology** for class names (`.block__element--modifier`)
+- CSS custom properties (variables) for reusable values
+- Mobile-first responsive design
+- Plugin-specific prefix for all classes (e.g., `your-plugin-` or custom prefix)
+- Use semantic HTML with proper ARIA attributes
+
+## Architecture & Structure
+
+- Modularity: odděl doménovou logiku od WP integrace (hooks/filters/adapters)
+- Use DI container or lightweight service locator; třídy jako final, závislosti injektuj v konstruktoru
+- Složky: `src/` logika, `admin/` (UI v adminu), `REST/`, `uninstall.php`
+- Další složky: `locks/`, `assets/(images|css|js)`, `languages/`, `tests/`, `bin/`, `vendor/`
+- Bootstrap: hlavní plugin file pouze: hlavička, autoload z Composeru, inicializace pluginu. Vše ostatní v src složce
+- Hlavní soubor pluginu by měl mít název stejný, jako složka pluginu
+- Aktivace/Deaktivace/Uninstall: použij `register_activation_hook`, `register_deactivation_hook` a `uninstall.php` (bez side-effects). Aktivace provede jen nutné věci (dbDelta, capability map), deaktivace uklidí plánované crony, uninstall umí bezpečně smazat data (pokud je nastaveno)
+
+### Třída Plugin
+
+Ve složce `src` bude třída Plugin, která obsahuje základní funkce pluginu, které se budou opakovaně používat.
+Třída bude typu singleton a vše se bude odehrávat uvnitř. Veškerá funkčnost bude vycházet z ní - rozdělení na public a admin část `init()`/`admin_init()` odděluje administraci a frontend.
+Metody se starají o aktivaci a deaktivaci pluginu, načtení jazykové domény a další.
+Pokud bude třeba, je možné třídu rozšířit, ale raději by vše mělo být v jiných třídách (obsluha hooků, administrace, enqueue, atd...)
+
+Vzorový kód třídy s povinnými metodami:
+```php
+	/**
+	 * Main plugin class for {plugin name}.
+	 *
+	 * This class is responsible for initializing the plugin, handling activation
+	 * and deactivation hooks, and setting up the plugin's functionality.
+	 *
+	 * @package {namepsace}
+	 * @since 1.0.0
+	 */
+
+	class Plugin {
+		/**
+		* Plugin version.
+		*
+		* @var string
+		*/
+		const VERSION = '1.0.0';
+
+		/**
+		* Plugin slug for text domain and other identifiers.
+		*
+		* @var string
+		*/
+		protected $plugin_slug = '{plugin_slug}';
+
+		/**
+		* Singleton instance of the plugin.
+		*
+		* @var Plugin|null
+		*/
+		protected static $instance = null;
+
+		/**
+		* Constructor.
+		*
+		* Initializes the plugin by setting up hooks and loading dependencies.
+		*/
+		private function __construct() {
+			$this->init();
+			if(is_admin()) {
+				$this->admin_init();
+			}
+		}
+
+		/**
+		* Get the plugin slug.
+		*
+		* @return string The plugin slug.
+		*/
+		public function get_plugin_slug(): string {
+			return $this->plugin_slug;
+		}
+
+		/**
+		* Get the singleton instance of the plugin.
+		*
+		* @return Plugin The singleton instance.
+		*/
+		public static function get_instance(): self {
+			if ( null === self::$instance ) {
+				self::$instance = new self();
+			}
+			return self::$instance;
+		}
+
+		/**
+		* Activation hook callback.
+		*
+		* Handles tasks to perform when the plugin is activated.
+		*
+		* @param bool $network_wide Whether the plugin is being activated network-wide.
+		*/
+		public static function activate( bool $network_wide ): void {
+			if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+				if ( $network_wide ) {
+					$blog_ids = self::get_blog_ids();
+					foreach ( $blog_ids as $blog_id ) {
+						switch_to_blog( $blog_id );
+						self::single_activate();
+					}
+					restore_current_blog();
+				} else {
+					self::single_activate();
+				}
+			} else {
+				self::single_activate();
+			}
+			
+			// Inicializovat default options pro reindexaci
+			self::init_default_options();
+		}
+
+		/**
+		* Deactivation hook callback.
+		*
+		* Handles tasks to perform when the plugin is deactivated.
+		*
+		* @param bool $network_wide Whether the plugin is being deactivated network-wide.
+		*/
+		public static function deactivate( bool $network_wide ): void {
+			if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+				if ( $network_wide ) {
+					$blog_ids = self::get_blog_ids();
+					foreach ( $blog_ids as $blog_id ) {
+						switch_to_blog( $blog_id );
+						self::single_deactivate();
+					}
+					restore_current_blog();
+				} else {
+					self::single_deactivate();
+				}
+			} else {
+				self::single_deactivate();
+			}
+		}
+
+		/**
+		* Activate new site callback for multisite.
+		*
+		* @param int $blog_id The ID of the new site.
+		*/
+		public function activate_new_site( int $blog_id ): void {
+			if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
+				return;
+			}
+			switch_to_blog( $blog_id );
+			self::single_activate();
+			restore_current_blog();
+		}
+
+		/**
+		* Get all blog IDs in a multisite network.
+		*
+		* @global \wpdb $wpdb WordPress database abstraction object.
+		* @return array An array of blog IDs.
+		*/
+		private static function get_blog_ids(): array {
+			global $wpdb;
+			$sql = "SELECT blog_id FROM $wpdb->blogs WHERE archived = '0' AND spam = '0' AND deleted = '0'";
+			return $wpdb->get_col( $sql );
+		}
+
+		/**
+		* Perform activation tasks for a single site.
+		*/
+		private static function single_activate(): void
+		{        
+		}
+
+		/**
+		* Perform deactivation tasks for a single site.
+		*/
+		private static function single_deactivate(): void
+		{        
+		}
+
+		/**
+		* Load the plugin text domain for translation.
+		*/
+		public function load_plugin_textdomain(): void {
+			$domain = $this->plugin_slug;
+			$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
+			load_textdomain( $domain, {product_constant} . '/languages/' . $domain . '-' . $locale . '.mo' );
+		}
+
+		/**
+		* Initialize the plugin.
+		*
+		* Set up hooks and other initialization tasks.
+		*/
+		public function init(): void {        
+		}
+
+		public function admin_init(): void {
+			
+		}
+		
+	} 
+```
+
+## Security (Must-Have)
+
+- **Escaping:** vždy na výstupu `esc_html`, `esc_attr`, `esc_url`, `wp_kses`/`wp_kses_post`. Neprintuj syrová data
+- **Sanitizace:** na vstupu `sanitize_text_field`, `sanitize_email`, `absint`, `floatval`, vlastní sanitizéry pro specifika
+- **Nonces & CSRF:** každý POST/AJAX/REST měj nonce a validaci (`check_admin_referer`, `wp_verify_nonce`)
+- **Capabilities:** nikdy nepoužívej `is_admin()` jako oprávnění. Vždy kontroluj capabilities (např. `current_user_can('manage_options')`)
+- **SQL:** používej `$wpdb->prepare()` se správnými placeholdery (`%s`, `%d`, `%f`). Žádné dynamické názvy tabulek bez whitelistu
+- **XSS/SQLi/SSRF/RCE:** blokuj vše, co by to umožnilo; pro HTTP volání preferuj `wp_safe_remote_*`
+- **Uploads:** whitelist MIME, velikosti, umístění; žádný spustitelný obsah; kontroluj obrázky přes `wp_check_filetype_and_ext`
+- **Deserializace:** nepoužívej `unserialize` na nedůvěryhodná data; preferuj JSON
+- **Secrets:** žádné klíče v repu; používej WP constants/ENV, možnost zadat v adminu bezpečně (maskované)
+- **CORS/REST:** vždy definuj `permission_callback`. Bezpečně pracuj s context (view, edit)
+- **Output buffering/headers:** používej WP API (`wp_send_json_*`, `wp_redirect` + `exit;`), `wp_safe_redirect` pro externí
+
+## Data, DB, Options
+
+- Preferuj WP API: Options API, Settings API, Meta API, pokud nebude definováno jinak
+- Tabulky v DB musí mít vždy prefix (např. `affinite-`), používej `dbDelta`, vlastní charset/collation z `$wpdb`
+- Autoload: velká data ukládej s `autoload = no`; transients expiruj a prefixuj
+- Migrace: verzi schématu drž v option; migrace atomické, idempotentní a reversibilní
+- Use WordPress database API (`$wpdb`)
+- Prepared statements for ALL SQL queries
+- Use transients for caching
+- Proper table prefix handling
+
+## Performance & Scaling
+
+- Žádné nákladné operace při každém requestu; drahé věci dej do cronů/asynchronního Action Scheduleru
+- Kešování: Transients, object cache; invalidace cílená na změnu dat
+- HTTP volání: timeouts, retries s backoff, kešuj výsledky
+- Skripty/styly: enqueue pouze tam, kde jsou potřeba; dependencies a verzování (`filemtime`)
+- I/O: minimalizuj synchronní disk/network operace
+- Lazy-loading a deferred strategie v adminu i frontendu
+
+## UI (Admin, Gutenberg, REST)
+
+### Admin Pages
+- Přes Settings API, nonce, capabilities; žádné inline skripty; přístupné (ARIA), přeložitelné
+- Administrace bude umístěná ve vlastní položce menu administrace a případné podstránky budou využívat ukládání dat do vlastních options, nebo databázových tabulek
+- Pro vzhled dashboard a formulářů se použije Tailwind
+
+### Gutenberg Blocks
+- **JavaScript:**
+  - ES6+ modules
+  - WordPress components (`@wordpress/components`)
+  - `useBlockProps` hook
+  - Server-side rendering for dynamic blocks
+  - Proper i18n with `@wordpress/i18n`
+- **PHP:**
+  - `block.json` for block metadata
+  - `render.php` for server-side rendering
+  - Proper escaping in render functions
+  - Use `register_block_type_from_metadata()`
+
+### REST API
+- Use WordPress REST API for AJAX requests when possible (prefer REST API over admin-ajax.php)
+- Admin-ajax.php použij pouze v případě, že to vyžaduje spolupráce s některým z jiných pluginů, jako je například WooCommerce
+- `register_rest_route` s namespace a versioningem (`/myplugin/v1/...`), schema pro parametry a odpovědi
+- Proper namespace: `/your-plugin/v1/`
+- Nonce verification
+- Permission callbacks
+
+### AJAX
+- Pouze přes specifické akce, nonce, capability check
+
+## WordPress Standards
+
+### Hooks & Filters
+- Use proper hook priorities
+- Document all custom hooks
+- Prefix all hooks: `your_plugin_` (lowercase, underscores)
+- Use descriptive hook names
+
+### Assets
+- Proper enqueueing with `wp_enqueue_script()` and `wp_enqueue_style()`
+- Versioning using plugin version constant
+- Conditional loading (only where needed)
+- Use `wp_localize_script()` for passing data to JavaScript
+
+## I18n & L10n
+
+- Text domain = slug pluginu; všechny řetězce přes `__()`, `_e()`, `_x()`, `esc_html__()` apod.
+- `.pot` generuj; locale nepřepisuj; počítej s RTL
+- Nepřekládej dynamické HTML – rozděluj text a značky
+
+## Compatibility & Integration
+
+- Multisite: ošetři site-specific data, `switch_to_blog` s `restore_current_blog`
+- WooCommerce HPOS: pokud relevantní, používej CRUD vrstvy a nemiř přímo na tabulky objednávek
+- Verzování WP: definuj "Requires at least" a "Tested up to"; funkce feature-detectuj (`function_exists`)
+- BC policy: přidej deprecation vrstvy (`_deprecated_function`), semver, changelog
+
+## Build, Dependencies, Bundling
+
+- Composer autoload PSR-4; minimalizuj vendor; zvaž prefixed balíčky, pokud hrozí konflikt
+- Frontend build: npm/yarn, žádné sourcemapy do produkce, integrita hashů při načítání z CDN je-li použitá
+- Licence: plugin musí být GPL-compatible; u třetích stran dolož licence
+
+### Composer
+
+Plugin bude využívat Composer pro autoload tříd. V kořenové složce projektu:
+```json
+{
+	"name": "your-company/your-plugin",
+	"description": "Plugin description",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"autoload": {
+		"psr-4": {
+			"YourCompany\\PluginName\\": "src/"
+		}
+	},
+	"require": {
+		"php": ">=8.1"
+	}
+}
+```
+
+Po spuštění: `composer install`
+
+## Logging, Errors, DX
+
+- Nepoužívej `die`/`var_dump` v produkci; používej `WP_Error`
+- Loguj přes PSR-3 kompatibilní logger (volitelně Monolog) s adaptací na WP; v debug režimu `WP_DEBUG_LOG`
+- U veřejných API metod vrať jasné chybové zprávy (bez úniku interních detailů)
+
+## Testing & QA
+
+- Unit tests: PHPUnit + Brain Monkey
+- Integration/e2e: WP-CLI + WP test suite / Playwright (pro bloky)
+- Pokrytí > 90% klíčové logiky
+- Static analysis (PHPStan/Psalm) a PHPCS běží v CI; build failuje na chybě
+- Pre-commit hooks: phpcs, phpstan, eslint, stylelint
+- Code review: povinné; 2 oči minimálně
+
+## Documentation & Metadata
+
+- Plugin header: Plugin Name, Description, Version, Requires at least, Requires PHP, Text Domain, Domain Path
+- `readme.txt` podle WP.org formátu (changelog, FAQ, screenshots)
+- Inline docs: phpdoc pro public API, filtry/akce vždy s příkladem použití
+- Bezpečnostní politika: SECURITY.md (kam hlásit zranitelnosti)
+- Uživatelská dokumentace: stručný onboarding + seznam schopností
+
+## UX, A11y, GDPR
+
+- **A11y:** klávesová ovladatelnost, kontrasty, ARIA role, focus states
+- **GDPR:** minimální sběr dat, jasné účely, expirační politika, export/erase hooks podporuj (`wp_privacy_personal_data_exporter`/`eraser`)
+- **Nastavení:** rozumné defaulty, validace vstupů, inline help
+
+## General Rules
+
+1. **Code must be readable and maintainable**
+2. **Security first** - always escape output, sanitize input
+3. **Performance** - optimize for speed, use caching
+4. **Accessibility** - use ARIA attributes, semantic HTML
+5. **DRY principle** - don't repeat code
+6. **Documentation** - code should be self-documenting, comments only when necessary
+
+## Pre-Commit Checklist
+
+- [ ] No jQuery code (unless absolutely necessary)
+- [ ] All outputs are escaped
+- [ ] All inputs are sanitized
+- [ ] Nonce verification for forms
+- [ ] Type hints in PHP
+- [ ] DocBlocks for classes and methods
+- [ ] Code follows PSR-12
+- [ ] `declare(strict_types=1)` in PHP files
+- [ ] Code is tested
+- [ ] PHPCS/PHPMD passes without errors
+- [ ] PHPStan/Psalm passes without errors
+- [ ] No dead code or magic tricks

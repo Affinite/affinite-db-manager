@@ -1,0 +1,471 @@
+/**
+ * Main styles for Affinite DB Manager.
+ *
+ * @package Affinite\DBManager
+ */
+
+/* Base styles */
+.affinite-db-manager {
+	max-width: 1200px;
+	margin: 20px 0;
+}
+
+.affinite-db-manager__loading,
+.affinite-db-manager__error {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 20px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+}
+
+.affinite-db-manager__error {
+	background: #fcf0f1;
+	border-color: #d63638;
+	color: #d63638;
+}
+
+/* Card component */
+.affinite-db-manager__card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	margin-bottom: 20px;
+}
+
+.affinite-db-manager__card-header {
+	padding: 15px 20px;
+	border-bottom: 1px solid #c3c4c7;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.affinite-db-manager__card-header h2 {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.affinite-db-manager__card-body {
+	padding: 20px;
+}
+
+/* Status toggle */
+.affinite-db-manager__status {
+	display: flex;
+	gap: 20px;
+	align-items: center;
+}
+
+.affinite-db-manager__status-option {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+}
+
+.affinite-db-manager__status-option input[type="radio"] {
+	margin: 0;
+}
+
+.affinite-db-manager__status-indicator {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #d63638;
+}
+
+.affinite-db-manager__status-indicator--active {
+	background: #00a32a;
+}
+
+/* Email whitelist */
+.affinite-db-manager__email-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.affinite-db-manager__email-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 15px;
+	background: #f6f7f7;
+	border-radius: 4px;
+	margin-bottom: 8px;
+}
+
+.affinite-db-manager__email-item:last-child {
+	margin-bottom: 0;
+}
+
+.affinite-db-manager__add-email {
+	display: flex;
+	gap: 10px;
+	margin-top: 15px;
+}
+
+.affinite-db-manager__add-email input {
+	flex: 1;
+}
+
+/* Table locks */
+.affinite-db-manager__table-search {
+	margin-bottom: 15px;
+}
+
+.affinite-db-manager__table-search input {
+	width: 100%;
+}
+
+.affinite-db-manager__table-list {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.affinite-db-manager__table-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 15px;
+	border-bottom: 1px solid #c3c4c7;
+	transition: background-color 0.2s ease;
+}
+
+.affinite-db-manager__table-item:hover {
+	background-color: #f6f7f7;
+}
+
+.affinite-db-manager__table-item:last-child {
+	border-bottom: none;
+}
+
+.affinite-db-manager__table-item--locked {
+	background: #fcf0f1;
+	border-color: #d63638;
+}
+
+.affinite-db-manager__table-item--updating {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+.affinite-db-manager__table-name {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+	font-weight: 500;
+	flex: 1;
+}
+
+.affinite-db-manager__no-tables {
+	text-align: center;
+	padding: 40px;
+	color: #646970;
+	grid-column: 1 / -1;
+}
+
+.affinite-db-manager__lock-icon {
+	font-size: 16px;
+}
+
+.affinite-db-manager__lock-icon-svg {
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+	margin-right: 6px;
+	color: currentColor;
+	flex-shrink: 0;
+}
+
+.affinite-db-manager__icon-svg {
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+	color: currentColor;
+	flex-shrink: 0;
+}
+
+/* Icon spacing in buttons */
+.components-button .affinite-db-manager__icon-svg {
+	margin: 0;
+}
+
+/* Arrow back icon spacing */
+.affinite-db-manager__back .affinite-db-manager__icon-svg {
+	margin-right: 6px;
+}
+
+/* Warning icon in no-access */
+.affinite-db-manager__no-access-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 16px;
+	color: #d63638;
+}
+
+/* Manager table list */
+.affinite-db-manager__toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	gap: 15px;
+}
+
+.affinite-db-manager__toolbar-filters {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	flex: 1;
+	justify-content: flex-end;
+}
+
+.affinite-db-manager__search {
+	width: 300px;
+}
+
+.affinite-db-manager__data-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.affinite-db-manager__data-table th,
+.affinite-db-manager__data-table td {
+	padding: 12px 15px;
+	text-align: left;
+	border-bottom: 1px solid #c3c4c7;
+}
+
+.affinite-db-manager__data-table th {
+	background: #f6f7f7;
+	font-weight: 600;
+}
+
+.affinite-db-manager__data-table tr:hover td {
+	background: #f6f7f7;
+}
+
+.affinite-db-manager__actions {
+	display: flex;
+	gap: 5px;
+}
+
+/* Table detail */
+.affinite-db-manager__back {
+	margin-bottom: 20px;
+}
+
+.affinite-db-manager__tabs {
+	display: flex;
+	gap: 0;
+	border-bottom: 1px solid #c3c4c7;
+	margin-bottom: 20px;
+}
+
+.affinite-db-manager__tab {
+	padding: 10px 20px;
+	background: none;
+	border: none;
+	border-bottom: 2px solid transparent;
+	cursor: pointer;
+	font-size: 14px;
+	color: #50575e;
+}
+
+.affinite-db-manager__tab:hover {
+	color: #2271b1;
+}
+
+.affinite-db-manager__tab--active {
+	color: #2271b1;
+	border-bottom-color: #2271b1;
+}
+
+/* Modal */
+.affinite-db-manager__modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100000;
+}
+
+.affinite-db-manager__modal {
+	background: #fff;
+	border-radius: 4px;
+	min-width: 400px;
+	max-width: 600px;
+	max-height: 90vh;
+	overflow-y: auto;
+	width: 100%;
+}
+
+.affinite-db-manager__modal[style*="width"] {
+	max-width: none;
+}
+
+.affinite-db-manager__modal-header {
+	padding: 15px 20px;
+	border-bottom: 1px solid #c3c4c7;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.affinite-db-manager__modal-header h3 {
+	margin: 0;
+}
+
+.affinite-db-manager__modal-body {
+	padding: 20px;
+}
+
+.affinite-db-manager__modal-footer {
+	padding: 15px 20px;
+	border-top: 1px solid #c3c4c7;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+/* Form elements */
+.affinite-db-manager__form-group {
+	margin-bottom: 15px;
+}
+
+.affinite-db-manager__form-group:last-child {
+	margin-bottom: 0;
+}
+
+.affinite-db-manager__form-group label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 600;
+}
+
+/* WordPress components gap override */
+.css-11pat5e {
+	gap: 0 !important;
+}
+
+.affinite-db-manager__form-group input,
+.affinite-db-manager__form-group select {
+	width: 100%;
+}
+
+.affinite-db-manager__form-group--inline {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.affinite-db-manager__form-group--inline label {
+	margin-bottom: 0;
+	font-weight: normal;
+}
+
+/* Notification */
+.affinite-db-manager__notification {
+	padding: 12px 20px;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.affinite-db-manager__notification--success {
+	background: #edfaef;
+	border: 1px solid #00a32a;
+	color: #00a32a;
+}
+
+.affinite-db-manager__notification--error {
+	background: #fcf0f1;
+	border: 1px solid #d63638;
+	color: #d63638;
+}
+
+.affinite-db-manager__notification--warning {
+	background: #fcf9e8;
+	border: 1px solid #dba617;
+	color: #996800;
+}
+
+.affinite-db-manager__notification--info {
+	background: #f0f6fc;
+	border: 1px solid #72aee6;
+	color: #2271b1;
+}
+
+/* No access message */
+.affinite-db-manager__no-access {
+	text-align: center;
+	padding: 40px;
+	background: #fcf9e8;
+	border: 1px solid #dba617;
+	border-radius: 4px;
+}
+
+.affinite-db-manager__no-access-icon {
+	font-size: 48px;
+	margin-bottom: 15px;
+}
+
+/* Confirm dialog */
+.affinite-db-manager__confirm-input {
+	margin-top: 15px;
+}
+
+.affinite-db-manager__confirm-input input {
+	width: 100%;
+	margin-top: 8px;
+}
+
+/* Data preview */
+.affinite-db-manager__data-preview {
+	overflow-x: auto;
+}
+
+.affinite-db-manager__pagination {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px solid #c3c4c7;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+	.affinite-db-manager__toolbar {
+		flex-direction: column;
+		gap: 15px;
+	}
+
+	.affinite-db-manager__search {
+		width: 100%;
+	}
+
+	.affinite-db-manager__modal {
+		min-width: auto;
+		width: 95%;
+		margin: 10px;
+	}
+}

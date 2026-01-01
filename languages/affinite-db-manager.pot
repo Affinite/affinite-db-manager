@@ -1,0 +1,490 @@
+# Copyright (C) 2024 Affinite
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Affinite DB Manager 1.0.0\n"
+"Report-Msgid-Bugs-To: https://affinite.cz\n"
+"POT-Creation-Date: 2024-01-01T00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: src/Admin/SettingsPage.php:43
+#: src/Admin/ManagerPage.php:43
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:48
+msgid "DB Manager - Settings"
+msgstr ""
+
+#: src/Admin/ManagerPage.php:48
+msgid "DB Manager"
+msgstr ""
+
+#: src/Plugin.php:234
+msgid "DB Manager"
+msgstr ""
+
+#: src/Plugin.php:241
+msgid "Tables"
+msgstr ""
+
+#: src/Plugin.php:249
+msgid "Settings"
+msgstr ""
+
+#: assets/js/src/App.jsx
+msgid "Loading..."
+msgstr ""
+
+#: assets/js/src/App.jsx
+msgid "Error loading data:"
+msgstr ""
+
+#: assets/js/src/components/settings/SettingsPage.jsx
+msgid "Status"
+msgstr ""
+
+#: assets/js/src/components/settings/SettingsPage.jsx
+msgid "Allowed Users"
+msgstr ""
+
+#: assets/js/src/components/settings/SettingsPage.jsx
+msgid "Table Locks"
+msgstr ""
+
+#: assets/js/src/components/settings/StatusToggle.jsx
+msgid "DB Manager activated."
+msgstr ""
+
+#: assets/js/src/components/settings/StatusToggle.jsx
+msgid "DB Manager deactivated."
+msgstr ""
+
+#: assets/js/src/components/settings/StatusToggle.jsx
+msgid "Failed to update status."
+msgstr ""
+
+#: assets/js/src/components/settings/StatusToggle.jsx
+msgid "Active"
+msgstr ""
+
+#: assets/js/src/components/settings/StatusToggle.jsx
+msgid "Inactive"
+msgstr ""
+
+#: assets/js/src/components/settings/EmailWhitelist.jsx
+msgid "Leave empty to allow all administrators. Add emails to restrict access to specific users."
+msgstr ""
+
+#: assets/js/src/components/settings/EmailWhitelist.jsx
+msgid "No email restrictions. All administrators have access."
+msgstr ""
+
+#: assets/js/src/components/settings/EmailWhitelist.jsx
+msgid "Email added successfully."
+msgstr ""
+
+#: assets/js/src/components/settings/EmailWhitelist.jsx
+msgid "Email removed successfully."
+msgstr ""
+
+#: assets/js/src/components/settings/EmailWhitelist.jsx
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: assets/js/src/components/settings/EmailWhitelist.jsx
+msgid "Failed to add email."
+msgstr ""
+
+#: assets/js/src/components/settings/EmailWhitelist.jsx
+msgid "Failed to remove email."
+msgstr ""
+
+#: assets/js/src/components/settings/EmailWhitelist.jsx
+msgid "Add"
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "Search tables..."
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "Table locked successfully."
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "Table unlocked successfully."
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "Failed to lock table."
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "Failed to unlock table."
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "Lock"
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "Unlock"
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "Warning"
+msgstr ""
+
+#: assets/js/src/components/settings/TableLocks.jsx
+msgid "WordPress Core Table"
+msgstr ""
+
+#: assets/js/src/components/manager/ManagerPage.jsx
+msgid "DB Manager is not active or you do not have permission."
+msgstr ""
+
+#: assets/js/src/components/manager/ManagerPage.jsx
+msgid "Contact administrator."
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "+ New Table"
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "Table"
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "Columns"
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "Rows"
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "Actions"
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "No tables found."
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "Delete Table"
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "Table deleted successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/TableList.jsx
+msgid "Failed to delete table."
+msgstr ""
+
+#: assets/js/src/components/manager/TableDetail.jsx
+msgid "Back to Tables"
+msgstr ""
+
+#: assets/js/src/components/manager/TableDetail.jsx
+msgid "columns"
+msgstr ""
+
+#: assets/js/src/components/manager/TableDetail.jsx
+msgid "rows"
+msgstr ""
+
+#: assets/js/src/components/manager/TableDetail.jsx
+msgid "Indexes"
+msgstr ""
+
+#: assets/js/src/components/manager/TableDetail.jsx
+msgid "Relations"
+msgstr ""
+
+#: assets/js/src/components/manager/TableDetail.jsx
+msgid "Data"
+msgstr ""
+
+#: assets/js/src/components/manager/CreateTableModal.jsx
+msgid "New Table"
+msgstr ""
+
+#: assets/js/src/components/manager/CreateTableModal.jsx
+msgid "Table Name"
+msgstr ""
+
+#: assets/js/src/components/manager/CreateTableModal.jsx
+msgid "Table name is required."
+msgstr ""
+
+#: assets/js/src/components/manager/CreateTableModal.jsx
+msgid "All columns must have a name."
+msgstr ""
+
+#: assets/js/src/components/manager/CreateTableModal.jsx
+msgid "Table created successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/CreateTableModal.jsx
+msgid "Failed to create table."
+msgstr ""
+
+#: assets/js/src/components/manager/CreateTableModal.jsx
+msgid "Cancel"
+msgstr ""
+
+#: assets/js/src/components/manager/CreateTableModal.jsx
+msgid "Create"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "+ Add Column"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Name"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Type"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Null"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Default"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Extra"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Add Column"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Edit Column"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Delete Column"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Column name is required."
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Column added successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Column updated successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Column deleted successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Length"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Nullable"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Auto Increment"
+msgstr ""
+
+#: assets/js/src/components/manager/ColumnEditor.jsx
+msgid "Primary Key"
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "+ Add Index"
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "Add Index"
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "Delete Index"
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "Index Name"
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "Index name is required."
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "Select at least one column."
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "Index added successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "Index deleted successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/IndexManager.jsx
+msgid "No indexes found."
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "+ Add Relation"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Add Relation (Foreign Key)"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Delete Relation"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Column"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "References"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "ON DELETE"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "ON UPDATE"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Select column..."
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Select table..."
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Referenced Table"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Referenced Column"
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Column is required."
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Referenced table is required."
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Referenced column is required."
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Relation added successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "Relation deleted successfully."
+msgstr ""
+
+#: assets/js/src/components/manager/RelationEditor.jsx
+msgid "No relations found."
+msgstr ""
+
+#: assets/js/src/components/manager/DataPreview.jsx
+msgid "Showing"
+msgstr ""
+
+#: assets/js/src/components/manager/DataPreview.jsx
+msgid "of"
+msgstr ""
+
+#: assets/js/src/components/manager/DataPreview.jsx
+msgid "No data found."
+msgstr ""
+
+#: assets/js/src/components/manager/DataPreview.jsx
+msgid "No data available."
+msgstr ""
+
+#: assets/js/src/components/manager/DataPreview.jsx
+msgid "Page"
+msgstr ""
+
+#: assets/js/src/components/manager/DataPreview.jsx
+msgid "Previous"
+msgstr ""
+
+#: assets/js/src/components/manager/DataPreview.jsx
+msgid "Next"
+msgstr ""
+
+#: assets/js/src/components/common/ConfirmDialog.jsx
+msgid "Confirm"
+msgstr ""
+
+#: assets/js/src/components/common/ConfirmDialog.jsx
+msgid "To confirm, type"
+msgstr ""
+
+#: assets/js/src/components/common/SearchInput.jsx
+msgid "Search..."
+msgstr ""
+
+#: assets/js/src/components/common/Modal.jsx
+msgid "Close"
+msgstr ""
+
+#: various
+msgid "Delete"
+msgstr ""
+
+#: various
+msgid "Save"
+msgstr ""
+
+#: various
+msgid "View"
+msgstr ""
+
+#: various
+msgid "Edit"
+msgstr ""
+
+#: various
+msgid "Retry"
+msgstr ""
+
+#: various
+msgid "Back"
+msgstr ""
+
+#: various
+msgid "Remove"
+msgstr ""
