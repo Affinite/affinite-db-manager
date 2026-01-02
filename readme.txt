@@ -4,7 +4,7 @@ Tags: database, admin, management, tools
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,10 +44,16 @@ Core WordPress tables are protected by default. You can unlock them manually, bu
 
 == Changelog ==
 
+= 1.0.1 =
+* Fix missing vendor folder
+
 = 1.0.0 =
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Fix missing vendor folder issue.
 
 = 1.0.0 =
 Initial release of Affinite DB Manager.

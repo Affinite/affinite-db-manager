@@ -102,5 +102,8 @@ For issues, feature requests, or contributions, please visit the [GitHub reposit
 
 ## Changelog
 
+### 1.0.1
+* Fix missing vendor folder
+
 ### 1.0.0
 * Initial release

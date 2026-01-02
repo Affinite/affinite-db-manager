@@ -3,7 +3,7 @@
  * Plugin Name: Affinite DB Manager
  * Plugin URI: https://affinite.cz
  * Description: Complex database adminer for WordPress
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 5.9
  * Requires PHP: 8.1
  * Network: false
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version constant.
  */
-define( 'AFFINITE_DB_MANAGER_VERSION', '1.0.0' );
+define( 'AFFINITE_DB_MANAGER_VERSION', '1.0.1' );
 
 /**
  * Plugin directory path constant.
