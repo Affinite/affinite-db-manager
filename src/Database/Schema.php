@@ -333,8 +333,10 @@ final class Schema {
 			return $column_type;
 		}
 
-		$sql_parts = array( 'ALTER TABLE %i ADD COLUMN %i %s' );
-		$prepare_values = array( $table_name, $column_name, $column_type );
+		// Column type is validated and sanitized, so it's safe to insert directly into SQL.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Column type is validated and sanitized.
+		$sql_parts = array( "ALTER TABLE %i ADD COLUMN %i {$column_type}" );
+		$prepare_values = array( $table_name, $column_name );
 
 		if ( isset( $column['nullable'] ) && ! $column['nullable'] ) {
 			$sql_parts[] = 'NOT NULL';
@@ -403,8 +405,10 @@ final class Schema {
 			return $column_type;
 		}
 
-		$sql_parts = array( 'ALTER TABLE %i CHANGE COLUMN %i %i %s' );
-		$prepare_values = array( $table_name, $column_name, $new_column_name, $column_type );
+		// Column type is validated and sanitized, so it's safe to insert directly into SQL.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Column type is validated and sanitized.
+		$sql_parts = array( "ALTER TABLE %i CHANGE COLUMN %i %i {$column_type}" );
+		$prepare_values = array( $table_name, $column_name, $new_column_name );
 
 		if ( isset( $column['nullable'] ) && ! $column['nullable'] ) {
 			$sql_parts[] = 'NOT NULL';
